@@ -1,0 +1,78 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.array-container {
+  display: flex;
+  align-items: flex-end;
+  height: 40vh;
+  overflow-x: auto;
+  padding: 10px;
+}
+
+.bar {
+  width: 20px;
+  margin: 0 1px;
+  background-color: dodgerblue;
+  position: relative;
+}
+
+button {
+  margin-top: 20px;
+}
+
+.height {
+  /* Define styling for the value display */
+  display: block;
+  text-align: center;
+  font-size: 10px;
+  color: black;
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#inputArr {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+select,
+input[type="range"],
+button {
+  width: 100%;
+  max-width: 300px;
+  margin: 5px;
+  padding: 5px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-top: 10px;
+}
+
+#rangeValue {
+  display: block;
+  text-align: center;
+  margin-top: -10px;
+}
+
+@media screen and (max-width: 600px) {
+  .array-container {
+    height: 20vh;
+  }
+
+  .bar {
+    width: 6px;
+  }
+}
