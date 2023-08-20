@@ -1,5 +1,17 @@
 const arrayContainer = document.getElementById("arrayContainer");
 const startButton = document.getElementById("startButton");
+const generateArraybtn = document.getElementById("randomArray");
+let input = document.getElementById("array");
+input.value = "";
+generateArraybtn.addEventListener("click", () => {
+  let randomArray = generateRandomArray(20, 40);
+  input.value = randomArray.toString();
+  if (startButton.disabled === false) {
+    displayArray(randomArray);
+  }
+});
+
+var time = 150;
 const rangeBar = document.getElementById("range");
 rangeBar.value = time;
 let val = document.getElementById("rangeValue");
