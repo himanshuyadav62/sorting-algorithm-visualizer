@@ -1,14 +1,13 @@
 const arrayContainer = document.getElementById("arrayContainer");
 const startButton = document.getElementById("startButton");
-var time = 200;
 const rangeBar = document.getElementById("range");
-rangeBar.innerHTML = time;
+rangeBar.value = time;
 let val = document.getElementById("rangeValue");
 val.innerHTML = time;
 rangeBar.addEventListener("input", () => {
-    time = parseInt(rangeBar.value);
-    val.innerHTML = time;
-})
+  time = parseInt(rangeBar.value);
+  val.innerHTML = time;
+});
 
 function reduceArray(array) {
   // Find the greatest value in the array
@@ -233,7 +232,6 @@ function parseNumberArray(inputText) {
 }
 
 startButton.addEventListener("click", async () => {
-    console.log(time);
   const button = document.getElementById("startButton");
   button.disabled = true;
   const size = 20; // Number of bars
