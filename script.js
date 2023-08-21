@@ -2,6 +2,16 @@ const arrayContainer = document.getElementById("arrayContainer");
 const startButton = document.getElementById("startButton");
 const generateArraybtn = document.getElementById("randomArray");
 let input = document.getElementById("array");
+let processRunning = false;
+input.addEventListener("input", () => {
+  console.log(input.value);
+  if (input.value != "")
+    document.querySelector("body").style.backgroundColor = input.value;
+  let arr = parseNumberArray(input.value);
+  if (processRunning == false && arr.length > 0) {
+    displayArray(arr);
+  }
+});
 input.value = "";
 generateArraybtn.addEventListener("click", () => {
   let randomArray = generateRandomArray(20, 40);
@@ -262,6 +272,7 @@ startButton.addEventListener("click", async () => {
   displayArray(array);
 
   const sortingMethod = document.getElementById("method").value;
+  processRunning = true;
   if (sortingMethod == "Merge Sort") {
     await mergeSort(array, 0, array.length - 1);
   } else if (sortingMethod == "Bubble Sort") {
@@ -273,9 +284,10 @@ startButton.addEventListener("click", async () => {
   } else if (sortingMethod == "Insertion Sort") {
     await insertionSort(array);
   } else if (sortingMethod == "Quick Sort") {
-    await quickSort(array);
+    await quickSort(array,0,array.length - 1);
   }
   displayArray(array);
+  processRunning = false;
   console.log(array);
   button.disabled = false;
 });
