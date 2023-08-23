@@ -1,6 +1,7 @@
 const arrayContainer = document.getElementById("arrayContainer");
 const startButton = document.getElementById("startButton");
 const generateArraybtn = document.getElementById("randomArray");
+const mergeContainer = document.getElementById("mergeContainer");
 let input = document.getElementById("array");
 let processRunning = false;
 input.addEventListener("input", () => {
@@ -69,13 +70,22 @@ async function displayArray(array, index1, index2, barColor) {
   await new Promise((resolve) => setTimeout(resolve, time));
 }
 
-function generateRandomArray(size, maxValue) {
-  const array = [];
-  for (let i = 0; i < size; i++) {
-    array.push(Math.floor(Math.random() * maxValue) + 1);
+async function displayMerge(array,index1,index2){
+  mergeContainer.innerHTML = "";
+  for(let i = index1; i <= index2;i++){
+    let value = array[i];
+    const bar = document.createElement("div");
+    bar.classList.add("bar");
+    bar.style.height = value * 5 + "px";
+    const h = document.createElement("span");
+    h.innerHTML=value;
+    h.classList.add("height");
+    bar.appendChild(h);
+    mergeContainer.appendChild(bar);
   }
-  return array;
+  await new Promise((resolve) => setTimeout(resolve,time));
 }
+
 
 async function merge(arr, l, m, r) {
   let n1 = m - l + 1;
@@ -83,12 +93,12 @@ async function merge(arr, l, m, r) {
 
   let L = new Array(n1);
   let R = new Array(n2);
-
+  
   for (let i = 0; i < n1; ++i) L[i] = arr[l + i];
   for (let j = 0; j < n2; ++j) R[j] = arr[m + 1 + j];
-
+  
   let i = 0,
-    j = 0;
+  j = 0;
   let k = l;
 
   while (i < n1 && j < n2) {
@@ -101,22 +111,27 @@ async function merge(arr, l, m, r) {
       await displayArray(arr, i + l, j + m + 1, "red");
       j++;
     }
+    await displayMerge(arr,l,k);
     k++;
   }
-
+  
   while (i < n1) {
     arr[k] = L[i];
     await displayArray(arr, k, -1, "red");
+    await displayMerge(arr,l,k);
     i++;
     k++;
   }
   while (j < n2) {
     arr[k] = R[j];
     await displayArray(arr, k, -1, "red");
+    await displayMerge(arr,l,k);
     j++;
     k++;
   }
   await displayArray(arr);
+  // await displayMerge(arr,l,r);
+  mergeContainer.innerHTML = "";
 }
 
 async function mergeSort(arr, l, r) {
@@ -128,6 +143,29 @@ async function mergeSort(arr, l, r) {
   }
 }
 
+async function displayBubble(array, index1, index2, barColor, index3) {
+  arrayContainer.innerHTML = "";
+  let temp = array.slice();
+  temp = reduceArray(temp);
+  arrayContainer.innerHTML = "";
+  let i = 0;
+  array.forEach((value, index) => {
+    const bar = document.createElement("div");
+    bar.classList.add("bar");
+    bar.style.height = temp[i] * 5 + "px";
+    const h = document.createElement("span");
+    h.innerHTML = value;
+    h.classList.add("height");
+    bar.appendChild(h);
+    if (index === index1 || index === index2 || index >= index3) {
+      bar.style.backgroundColor = barColor; // Set the bar color for swapping bars
+    }
+    arrayContainer.appendChild(bar);
+    i++;
+  });
+  await new Promise((resolve) => setTimeout(resolve, time));
+}
+
 async function bubbleSort(array) {
   for (let i = 0; i < array.length; i++) {
     for (let j = 0; j < array.length - i - 1; j++) {
@@ -135,16 +173,16 @@ async function bubbleSort(array) {
         [array[j], array[j + 1]] = [array[j + 1], array[j]];
 
         // Display the swapping bars in a different color (e.g., red)
-        displayArray(array, j, j + 1, "red");
+        displayBubble(array, j, j + 1, "red", array.length - i);
         await new Promise((resolve) => setTimeout(resolve, time));
-
         // Revert the color back to the original (dodgerblue)
-        displayArray(array, j, j + 1, "dodgerblue");
-        await new Promise((resolve) => setTimeout(resolve, time));
+        displayBubble(array, j, j + 1, "dodgerblue", array.length - i);
       }
     }
   }
+  await new Promise((setTimeout) => setTimeout(resolve, time));
 }
+
 
 // Selection Sort
 async function selectionSort(array) {
@@ -209,25 +247,25 @@ async function partition(array, low, high) {
 // Heap Sort
 async function heapSort(array) {
   const n = array.length;
-
+  
   for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
     await heapify(array, n, i);
   }
-
+  
   for (let i = n - 1; i > 0; i--) {
     [array[0], array[i]] = [array[i], array[0]];
-    displayArray(array, 0, i, "red");
+    displayBubble(array, 0, i, "red",i+1);
     await new Promise((resolve) => setTimeout(resolve, time));
-    displayArray(array, 0, i, "dodgerblue");
-    await heapify(array, i, 0);
+    displayBubble(array, 0, i, "dodgerblue",i+1);
+    await heapify(array, i, 0,i);
   }
 }
 
-async function heapify(array, n, i) {
+async function heapify(array, n, i ,x) {
   let largest = i;
   const left = 2 * i + 1;
   const right = 2 * i + 2;
-
+  
   if (left < n && array[left] > array[largest]) {
     largest = left;
   }
@@ -235,13 +273,13 @@ async function heapify(array, n, i) {
   if (right < n && array[right] > array[largest]) {
     largest = right;
   }
-
+  
   if (largest !== i) {
     [array[i], array[largest]] = [array[largest], array[i]];
-    displayArray(array, i, largest, "red");
+    displayBubble(array, i, largest, "red",x);
     await new Promise((resolve) => setTimeout(resolve, time));
-    displayArray(array, i, largest, "dodgerblue");
-    await heapify(array, n, largest);
+    displayBubble(array, i, largest, "dodgerblue",x);
+    await heapify(array, n, largest,x);
   }
 }
 function parseNumberArray(inputText) {
@@ -251,6 +289,13 @@ function parseNumberArray(inputText) {
     return numberArray;
   }
   return [];
+}
+function generateRandomArray(size, maxValue) {
+  const array = [];
+  for (let i = 0; i < size; i++) {
+    array.push(Math.floor(Math.random() * maxValue) + 1);
+  }
+  return array;
 }
 
 startButton.addEventListener("click", async () => {
