@@ -143,10 +143,11 @@ async function mergeSort(arr, l, r) {
   }
 }
 
+
 async function displayBubble(array, index1, index2, barColor, index3) {
   arrayContainer.innerHTML = "";
   let temp = array.slice();
-  temp = reduceArray(temp);
+  temp = reduceArray(temp); // Assuming 'reduceArray' is defined elsewhere
   arrayContainer.innerHTML = "";
   let i = 0;
   array.forEach((value, index) => {
@@ -180,9 +181,8 @@ async function bubbleSort(array) {
       }
     }
   }
-  await new Promise((setTimeout) => setTimeout(resolve, time));
+  await new Promise((resolve) => setTimeout(resolve, time)); // Fixed the typo here
 }
-
 
 // Selection Sort
 async function selectionSort(array) {
