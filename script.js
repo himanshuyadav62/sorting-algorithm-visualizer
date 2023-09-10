@@ -184,6 +184,37 @@ async function bubbleSort(array) {
   await new Promise((resolve) => setTimeout(resolve, time)); // Fixed the typo here
 }
 
+async function displaySelection(array, index1, index2, barColor, index3,index4,index5) {
+  arrayContainer.innerHTML = "";
+  let temp = array.slice();
+  temp = reduceArray(temp); // Assuming 'reduceArray' is defined elsewhere
+  arrayContainer.innerHTML = "";
+  let i = 0;
+  array.forEach((value, index) => {
+    const bar = document.createElement("div");
+    bar.classList.add("bar");
+    bar.style.height = temp[i] * 5 + "px";
+    const h = document.createElement("span");
+    h.innerHTML = value;
+    h.classList.add("height");
+    bar.appendChild(h);
+    if (index >= index1 && index <= index2 ) {
+      bar.style.backgroundColor = barColor; // Set the bar color for swapping bars
+    }
+    if(index == index4){
+      bar.style.backgroundColor = "black";
+    }
+    if(index == index3){
+      bar.style.backgroundColor = "red";
+    }
+    if(index <= index5) {
+      bar.style.backgroundColor = "red";
+    }
+    arrayContainer.appendChild(bar);
+    i++;
+  });
+  await new Promise((resolve) => setTimeout(resolve, time));
+}
 // Selection Sort
 async function selectionSort(array) {
   for (let i = 0; i < array.length - 1; i++) {
@@ -192,29 +223,66 @@ async function selectionSort(array) {
       if (array[j] < array[minIndex]) {
         minIndex = j;
       }
+      displaySelection(array, i, j, "violet",minIndex,i,i-1);
+      await new Promise((resolve) => setTimeout(resolve,time));
     }
     [array[i], array[minIndex]] = [array[minIndex], array[i]];
-    displayArray(array, i, minIndex, "red");
+    displaySelection(array, i, array.length, "red",minIndex,i,i);
     await new Promise((resolve) => setTimeout(resolve, time));
-    displayArray(array, i, minIndex, "dodgerblue");
+    displaySelection(array, -1, -1, "dodgerblue",minIndex,i,i);
   }
 }
 
 // Insertion Sort
+async function displayInsertion(array, index1, index2, barColor, index3) {
+  arrayContainer.innerHTML = "";
+  let temp = array.slice();
+  temp = reduceArray(temp); // 'reduceArray' is defined elsewhere
+  arrayContainer.innerHTML = "";
+  let i = 0;
+
+  for (let index = 0; index < array.length; index++) {
+    const value = array[index];
+    const bar = document.createElement("div");
+    bar.classList.add("bar");
+    bar.style.height = temp[i] * 5 + "px";
+    const h = document.createElement("span");
+    h.innerHTML = value;
+    h.classList.add("height");
+    bar.appendChild(h);
+
+    if (index >= index1 && index <= index2) {
+      bar.style.backgroundColor = barColor; // Set the bar color to purple during swapping
+    }
+    if (index === index3) bar.style.backgroundColor = "red";
+    arrayContainer.appendChild(bar);
+    i++;
+  }
+
+  console.log("displayed insertion sort");
+  await new Promise((resolve) => setTimeout(resolve, time));
+}
+
+
 async function insertionSort(array) {
   for (let i = 1; i < array.length; i++) {
     let currentValue = array[i];
     let j = i - 1;
-    while (j >= 0 && array[j] > currentValue) {
-      array[j + 1] = array[j];
+    while (j >= 0 && array[j+1] < array[j]) {
+      displayInsertion(array, j,i-1, "purple", i); // Set purple color for the two elements being swapped
+      [array[j], array[j + 1]] = [array[j + 1], array[j]];
+      await new Promise((resolve) => setTimeout(resolve, time)); // Add a delay to see the purple color
+      displayInsertion(array, j,i-1, "purple", i); // Set purple color for the two elements being swapped
       j--;
+      await new Promise((resolve) => setTimeout(resolve, time)); // Add a delay to see the purple color
     }
     array[j + 1] = currentValue;
-    displayArray(array, j + 1, i, "red");
+    displayInsertion(array, i, i, "red", j + 1);
     await new Promise((resolve) => setTimeout(resolve, time));
-    displayArray(array, j + 1, i, "dodgerblue");
+    displayInsertion(array, -1, -1, "dodgerblue", -1);
   }
 }
+
 
 // Quick Sort
 async function quickSort(array, low, high) {
